@@ -1,0 +1,35 @@
+const localeTitles={
+'Make room for a pause.':'為日常留一個片刻。','A familiar movement. A new daily ritual.':'熟悉的旋轉，全新的日常儀式。','Finding balance through form.':'讓平衡逐漸成形。','Discarded glass. Renewed purpose.':'廢棄玻璃，重新發光。','Spin to balance. Light to calm.':'旋轉感受平衡，光線帶來平靜。','A quiet surface. A considered interior.':'寧靜的外表，細緻的內在。','From the workshop to a shared experience.':'從工坊，走向共享體驗。','A softer rhythm for work and life.':'為工作與生活，放慢節奏。',
+'Aromatherapy, wherever you are.':'讓香氣隨行。','A playful opening. A considered silhouette.':'俏皮的開口，細膩的輪廓。','Soft light. Tactile detail.':'柔和光線，觸感細節。','One character. Six expressions.':'一種性格，六種表情。','A simple ritual. A rhythmic release.':'簡單儀式，有節奏的釋放。','Make it. Observe it. Refine it.':'製作、觀察、再修整。','A little delight in the everyday.':'為日常增添一點趣味。',
+'Space as a design starting point.':'從太空意象開始設計。','Precision through light.':'以光線建立精準。','A surface for imagination.':'承載想像的表面。','Depth through transparency.':'透過透明，創造深度。','A language beyond the silhouette.':'超越輪廓的設計語言。','A product theme, translated into graphics.':'將產品主題轉化為圖像。','From proposals to production care.':'從提案，走向量產細節。',
+'Information becomes part of the space.':'讓資訊成為空間的一部分。','One technology. Two spatial expressions.':'一種技術，兩種空間表情。','Light in appearance. Visible in use.':'輕盈的外觀，清楚的使用。','Move freely. Settle securely.':'自由移動，穩定停放。','A layout for every kind of work.':'讓配置回應不同工作。','A defined frame. A flexible system.':'鮮明框架，彈性系統。','One space. Different perspectives.':'一個空間，不同視角。',
+'Thoughtful by nature. Precise by design.':'以細膩觀察，成就精準設計。','Selected works':'精選作品','A shared platform, clearly organized.':'清楚組織，共享平台。','Understanding the pressure on soil.':'理解土壤面臨的壓力。','A motion inspired by DNA.':'以 DNA 為靈感的動態。','Reading the wheel as a system.':'以系統觀點理解輪組。',
+'Turning ideas into meaningful objects.':'讓想法成為有意義的物件。'
+};
+const localeUI={
+'INDUSTRIAL DESIGN & RESEARCH':'工業設計與研究','TAIWAN · PORTFOLIO':'台灣 · 設計作品集','PRODUCT DESIGN / CMF / AI RESEARCH':'產品設計／色彩材質／AI 研究','MOVE TO EXPLORE':'移動滑鼠探索','SCROLL TO SELECTED WORKS':'下滑瀏覽精選作品','OBJECTS, SYSTEMS & EXPERIENCES':'物件、系統與體驗','Design research':'設計研究','Industrial design':'工業設計','CMF & visualization':'色彩材質與視覺化','AI-assisted exploration':'AI 輔助探索','LET’S CREATE SOMETHING MEANINGFUL.':'一起創造有意義的設計。','CLOSE ×':'關閉 ×','VIEW ↗':'瀏覽 ↗','MOVE TO EXPLORE · TOUCH TO FROST':'移動滑鼠探索 · 輕觸臉部霧化',
+'OBSERVATION & OPPORTUNITY':'觀察與設計機會','MEMORY & INSPIRATION':'記憶與靈感','SKETCH DEVELOPMENT':'草圖發展','MATERIAL JOURNEY':'材料旅程','LIGHT & INTERACTION':'光與互動','STRUCTURE & DETAIL':'結構與細節','CRAFT & PROTOTYPING':'工藝與原型','EVERYDAY CONTEXT':'日常情境','CONTEXT & OPPORTUNITY':'情境與機會','SKETCH & FORM':'草圖與形體','MATERIAL & FINISH':'材料與表面處理','COLOR EXPLORATION':'色彩探索','COMPONENTS & INTERACTION':'元件與互動','PROTOTYPE & TESTING':'原型與測試','EVERYDAY PRESENCE':'日常陪伴','DIRECTION & EXPLORATION':'方向與探索','MATERIAL & VISUAL REFERENCES':'材料與視覺參考','SPACE EDITION / GRAPHIC DESIGN':'太空特別版／視覺設計','VIVOBOOK / PRODUCTION SUPPORT':'VIVOBOOK／量產支援','WORKSPACE & USER NEEDS':'工作空間與使用者需求','SKETCH & DESIGN DIRECTIONS':'草圖與設計方向','CONCEPT 01 / SOFT & TACTILE':'提案一／柔和與觸感','MOBILITY & EVERYDAY DETAILS':'移動與日常細節','CONCEPT 01 / SCENARIOS':'提案一／使用情境','CONCEPT 02 / DARK & ARCHITECTURAL':'提案二／深色與建築感','CONCEPT 02 / DUAL-SIDED SCENARIOS':'提案二／雙面使用情境',
+'RESEARCH WORKSPACE':'研究工作空間','KNOWLEDGE BASE':'知識庫','PRODUCT EXPLORER':'產品探索','DESIGN TASK':'設計任務','ANALYSIS SETTINGS':'分析設定','EVIDENCE-BASED DIALOGUE':'以證據為本的對話','INSIGHT BOARD':'洞察看板','DESIGN DIRECTION':'設計方向','MODULE 01 / PRODUCT DNA':'模組一／產品基因','MODULE 02 / REFINEMENT':'模組二／產品改良','MODULE 03 / FUTURE CMF':'模組三／未來色彩材質','METHOD & REFLECTION':'研究方法與反思','DESIGN CHALLENGE':'設計課題','SYSTEM ARCHITECTURE':'系統架構','MODULAR OPERATION':'模組化操作','RESTORATION PROCESS':'修復流程','WHEEL SYSTEM':'輪組系統','PROTOTYPE & EXHIBITION':'原型與展覽','RESEARCH → PRODUCT CONCEPT':'研究 → 產品概念'
+};
+const normalizeLocale=s=>s.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').replace(/<br\s*\/?[^>]*>/gi,' ').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+const reverseCopy={};for(const [zh,en] of Object.entries(englishCopy)){reverseCopy[normalizeLocale(en)]=normalizeLocale(zh);}
+function makeLocalePair(el,en,zh){if(!en||!zh)return;el.replaceChildren();const a=document.createElement('span'),b=document.createElement('span');a.className='copy-en';a.lang='en';a.textContent=en;b.className='copy-zh';b.lang='zh-Hant';b.textContent=zh;el.append(a,b);el.dataset.localeReady='true';}
+function prepareLocale(root){
+ for(const el of root.querySelectorAll('h2,h3,h4,dt,.eyebrow,.project-caption small,.header-label,.hero-meta>span,.intro>span,.mouse-label,.hero-bottom>a,.section-heading>span,.capabilities>span,footer>div>span,.close,.project-view-label,.work-view-cursor,.avatar-caption')){
+ if(el.closest('.language-switch')||el.querySelector('.copy-en')||el.dataset.localeReady)continue;
+ if(el.classList.contains('avatar-caption')){makeLocalePair(el,'MOVE TO EXPLORE · TOUCH TO FROST','移動滑鼠探索 · 輕觸臉部霧化');continue;}
+ const text=el.textContent.replace(/\s+/g,' ').trim(),key=normalizeLocale(el.innerHTML);
+ if(el.matches('.section-heading h2')){makeLocalePair(el,'Selected works','精選作品');continue;}
+ const translated=localeTitles[key]||localeUI[text]||reverseCopy[key];
+ if(translated && !/[\u4e00-\u9fff]/.test(text)){makeLocalePair(el,key,translated);continue;}
+ const mixed=text.match(/^(.*)\s*[\/·]\s*(.+)$/);if(mixed&&/[\u4e00-\u9fff]/.test(mixed[2])){makeLocalePair(el,mixed[1],mixed[2]);continue;}
+ const numbered=text.match(/^(\d+[A-Z]?\s*\/\s*)(.*)$/);if(numbered&&localeUI[numbered[2]])makeLocalePair(el,text,numbered[1]+localeUI[numbered[2]]);
+ }
+}
+let selectedLocale='en';try{selectedLocale=localStorage.getItem('gyee-language')==='zh-Hant'?'zh-Hant':'en'}catch{}
+function setPortfolioLanguage(lang){selectedLocale=lang;document.documentElement.lang=lang;document.documentElement.dataset.language=lang;document.querySelectorAll('.language-switch button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.language===lang)));try{localStorage.setItem('gyee-language',lang)}catch{};document.title=lang==='en'?'Gyee CHEN — Design Portfolio':'Gyee CHEN — 設計作品集';document.dispatchEvent(new Event('portfolio-languagechange'));}
+function languageControl(){const group=document.createElement('div');group.className='language-switch';group.setAttribute('role','group');group.setAttribute('aria-label','Language / 語言');for(const [code,label]of [['en','EN'],['zh-Hant','中文']]){const b=document.createElement('button');b.type='button';b.dataset.language=code;b.textContent=label;b.onclick=()=>setPortfolioLanguage(code);group.append(b)}return group;}
+document.querySelector('header').append(languageControl());const modalControl=languageControl();modalControl.classList.add('dialog-language');document.querySelector('#detail').prepend(modalControl);
+for(const x of Object.values(projectStories))localeTitles[x[0]]=x[1];
+prepareLocale(document);setPortfolioLanguage(selectedLocale);
+new MutationObserver(()=>prepareLocale(document.querySelector('#detail-content'))).observe(document.querySelector('#detail-content'),{childList:true,subtree:true});

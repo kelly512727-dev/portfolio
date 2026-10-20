@@ -1,0 +1,7 @@
+const auoOriginal=customCases.TRANSPARENT;
+customCases.TRANSPARENT=p=>{const t=document.createElement('template');t.innerHTML=auoOriginal(p);
+ t.content.querySelector('.auo-statistics').outerHTML=`<figure class="auo-web-stats"><div class="auo-stat-tile small"><span tabindex="0">77<small>%</small></span></div><div class="auo-stat-tile"><span tabindex="0">90<small>%</small></span></div><figcaption>${auoBi('Workspace research figures','工作空間研究數據')}</figcaption></figure>`;
+ t.content.querySelector('.auo-detail-strip').outerHTML=`<figure class="auo-photo auo-connection-sequence"><div>${[1,2,3,4].map((i)=>`<img src="assets/auo-expanded/connection-${i}.jpg" alt="Connection detail ${i}" loading="lazy" style="--order:${i-1}">`).join('')}</div><figcaption>${auoBi('Magnetic attachment, flexible connection, handle and camera.','磁吸固定、彈性連接、提把與相機。')}</figcaption></figure>`;
+ t.content.querySelector('.auo-dark-proposal .auo-portrait img').src='assets/auo-expanded/18-updated.png';
+ return t.innerHTML.replaceAll('v=20261019-3','v=20261019-white');};
+(()=>{const seen=new WeakSet();const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');observer.unobserve(e.target);}}),{threshold:.35});new MutationObserver(()=>document.querySelectorAll('.auo-connection-sequence').forEach(el=>{if(!seen.has(el)){seen.add(el);observer.observe(el);}})).observe(document.querySelector('#detail-content'),{childList:true,subtree:true});})();
