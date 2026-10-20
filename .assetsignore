@@ -1,0 +1,10 @@
+# Publish the website, not Git history or deployment metadata.
+.git/
+.github/
+.wrangler/
+node_modules/
+.gitignore
+.assetsignore
+wrangler.jsonc
+README.md
+.DS_Store
