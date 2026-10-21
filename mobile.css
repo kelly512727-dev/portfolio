@@ -1,0 +1,78 @@
+/* Phone-only refinements. Desktop rules remain in style.css. */
+@media(max-width:767px){
+ html,body{max-width:100%;overflow-x:clip}
+ header{display:grid;grid-template-columns:1fr auto;gap:10px 16px;padding:18px 20px}
+ header .logo{font-size:27px}header .header-label{display:none}header nav{gap:16px;font-size:12px;align-items:center}
+ header>.language-switch{grid-column:1/-1;justify-self:end;margin:0;gap:12px}header .language-switch button{min-height:32px}
+ .has-hero-transition .hero-scroll-scene{height:auto}
+ .has-hero-transition .hero-scroll-scene>.hero{position:relative;transform:none!important;opacity:1!important;pointer-events:auto!important}
+ .has-hero-transition #work{margin-top:0}
+ .hero-meta{top:128px;left:24px;font-size:9px;gap:20px}
+ .hero{height:auto;min-height:100svh;overflow:hidden}
+ .hero-title{position:relative;top:auto;right:auto;width:auto;margin:340px 24px 115px}
+ .hero h1{font-size:clamp(84px,24vw,120px);line-height:.9;letter-spacing:-.065em}
+ .hero .intro{margin-top:32px;max-width:none}.hero .intro p,.hero .intro .copy-zh{font-size:15px;line-height:1.8}
+ .hero .intro>span{font-size:10px;line-height:1.6;margin-top:22px;letter-spacing:.8px}
+ .hero .seed.s1{left:8%;top:178px;width:125px;height:145px}.hero .seed.s2{left:46%;top:206px;width:145px;height:115px}.hero .seed.s3{display:none}
+ .hero-bottom{left:24px;right:24px;bottom:28px;font-size:9px}.hero-bottom .mouse-label{display:none}
+ .work{padding:32px 12px 0}.section-heading{padding:0 8px 24px}.masonry{columns:1}.project{margin-bottom:14px;border-radius:12px}
+ .project-caption{opacity:1;transform:none;padding:48px 20px 20px}.project-caption strong{font-size:23px}.project-caption small{font-size:12px}
+ .project img{height:auto;max-width:100%}.project-view-label{right:12px;top:12px;font-size:10px;padding:8px 10px}
+ #detail.editorial-dialog[open]{width:calc(100vw - 20px);height:calc(100svh - 20px);max-height:calc(100svh - 20px);max-width:none;border-radius:16px;scrollbar-gutter:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+ #detail.editorial-dialog[open] .editorial-case{padding:0 20px 30px;min-width:0}
+ #detail .close{float:none;display:block;margin-left:auto;padding:17px 18px;min-height:52px;font-size:13px;z-index:10;border-top-right-radius:15px}
+ #detail .dialog-language{left:14px;top:9px;padding:0;gap:10px}#detail .dialog-language button{min-height:34px;font-size:12px}
+ #detail .editorial-intro{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;padding:28px 0 30px;align-items:start}
+ #detail .editorial-intro>div,#detail .editorial-intro aside{min-width:0;width:100%;max-width:none}
+ #detail .editorial-intro h2{font-size:clamp(29px,8vw,42px);line-height:1.12;letter-spacing:-1.1px;margin:22px 0;overflow-wrap:anywhere}
+ #detail .editorial-lead{font-size:16px;line-height:1.8;max-width:none;margin-bottom:0}
+ #detail .editorial-intro aside{margin:0;padding-top:22px}#detail .editorial-intro aside dl{display:block}
+ #detail .editorial-intro dd{font-size:14px;line-height:1.65;overflow-wrap:anywhere;margin-bottom:18px}#detail .editorial-intro dd .copy-zh{font-size:14px}
+ #detail .editorial-award{font-size:12px;line-height:1.8;overflow-wrap:anywhere}
+ #detail-content,#detail .editorial-case *{min-width:0}
+ #detail figure{max-width:100%}#detail img,#detail video,#detail canvas{max-width:100%}
+ #detail p,#detail dd,#detail figcaption{overflow-wrap:break-word}
+ .editorial-heading,.ning-section-heading,.tako-heading,.asus-heading,.auo-heading,.oasis-wheel-copy{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;margin-bottom:28px}
+ .editorial-heading h3,.ning-section h3,.tako-heading h3,.asus-heading h3,.auo-heading h3{font-size:clamp(27px,7.3vw,35px);line-height:1.25;letter-spacing:-.035em;margin:0;overflow-wrap:break-word}
+ .editorial-heading>p,.ning-section-heading>p,.tako-heading>p,.asus-heading>p,.auo-heading>p{font-size:15px;line-height:1.8;margin:0}
+ .case-story{padding:32px 0 40px}.case-story>h3{font-size:29px;line-height:1.25;max-width:100%;margin:20px 0 24px}
+ .story-grid,.editorial-principles,.editorial-split,.structure-layout,.ai-details,.ning-structure,.asus-notes,.asus-combined-notes,.auo-notes{grid-template-columns:minmax(0,1fr);gap:24px}
+ .story-grid p,.story-grid .copy-zh{font-size:15px;line-height:1.8}.story-grid p{margin-top:12px}
+ .ning-section,.tako-chapter,.asus-chapter,.auo-chapter,.editorial-chapter{padding-top:44px;padding-bottom:44px}
+ .ning-pair,.editorial-diptych,.tako-form-pair,.tako-materials,.tako-scenarios,.tako-final-pair,.auo-research-pair,.auo-pair,.auo-scenarios,.asus-proposal-pair,.asus-reference-grid,.asus-combined-proposals,.oasis-reference-pair{grid-template-columns:minmax(0,1fr);gap:24px!important}
+ .ning-process,.ning-research,.tako-instructions,.asus-workflow,.oasis-drivers,.oasis-making-notes.oasis-making-aligned{grid-template-columns:minmax(0,1fr);gap:28px!important}
+ .ning-memory{grid-template-columns:1fr 1fr;gap:20px 12px}.ning-memory figure,.ning-memory figure:nth-child(4),.ning-memory figure:nth-child(5){grid-column:auto}.ning-memory figure:last-child{grid-column:1/-1}
+ .ning-color-labels{gap:8px;font-size:10px}.ning-motion{margin:20px 0 32px}
+ .ning-motion video,.tako-hero video{height:auto;max-height:none;aspect-ratio:16/9;object-fit:contain}
+ .ning-pair img,.ning-context img,.ning-banner img{height:auto;aspect-ratio:auto;object-fit:contain}
+ .tako-scenarios .tako-photo img,.tako-final-pair .tako-photo img,.tako-testing img{height:auto!important;max-height:440px!important;aspect-ratio:auto!important;object-fit:contain!important}
+ .tako-instructions article>img{height:auto;max-height:320px;object-fit:contain;margin-bottom:16px}
+ .tako-structure{grid-template-columns:minmax(0,1fr)!important;gap:30px!important}
+ .tako-native-exploded{height:auto;display:flex;flex-direction:column;gap:24px}
+ .tako-native-exploded>img{position:static;width:100%;height:auto;max-height:620px;object-fit:contain}
+ .tako-native-exploded ol{position:static;inset:auto;display:grid;gap:0;width:100%}
+ .tako-native-exploded li{position:static;left:auto;top:auto!important;width:100%;display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;padding:18px 0;border-bottom:1px solid #e3e5de}
+ .tako-native-exploded h4{width:auto;font-size:16px;line-height:1.5;margin:0;padding:0}
+ .tako-native-exploded p,.tako-native-exploded p .copy-zh{font-size:14px!important;line-height:1.8;max-width:none}
+ .tako-native-exploded .component-leader,.tako-native-exploded li:before,.tako-native-exploded li:after{display:none}
+ .tako-native-flow>img{height:auto;max-height:400px;object-fit:contain}
+ .asus-globe-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.asus-globe-grid .asus-motion-main{grid-column:1/-1;max-width:280px;margin:auto!important}
+ .asus-globe-grid img,.asus-globe-grid .asus-motion-main img,.asus-combined-proposals .asus-proposal img{height:auto;aspect-ratio:auto;object-fit:contain}
+ .auo-context{grid-template-columns:minmax(0,1fr);gap:22px}.auo-context img{height:auto;max-height:260px;object-fit:contain}
+ .auo-dark-proposal{margin-left:-20px;margin-right:-20px;padding-left:20px;padding-right:20px}
+ .auo-motion-story{height:auto;margin:28px 0 36px}.auo-motion-sticky{position:relative;top:auto;padding:12px 0;box-shadow:none!important}
+ .auo-motion-screen{max-height:none;aspect-ratio:16/9}.auo-motion-top{font-size:9px;line-height:1.5;letter-spacing:.4px}.auo-motion-top>span:last-child{display:none}
+ .auo-motion-caption{gap:10px}.auo-motion-caption p{font-size:15px}.auo-motion-caption button{min-width:44px;min-height:44px;padding:8px}
+ .auo-motion-nav{gap:12px;justify-content:flex-start;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x proximity}.auo-motion-nav button{flex:0 0 auto;min-width:64px;min-height:44px;font-size:12px;padding:10px 4px;scroll-snap-align:start}
+ .auo-connection-sequence>div{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ #detail-content .oasis-field-pair,#detail-content .oasis-wheel-images{grid-template-columns:minmax(0,1fr);gap:22px}
+ #detail-content .oasis-field-pair img,#detail-content .oasis-wheel-images img{height:auto;max-height:360px;aspect-ratio:auto;object-fit:contain}
+ .oasis-research-motion{grid-template-columns:minmax(0,1fr);gap:20px}.oasis-component-legend{grid-template-columns:minmax(0,1fr)}
+ .ai-screen figcaption{flex-direction:column}.ai-screen figcaption>span{max-width:100%}.ai-screen figcaption a{white-space:normal}
+ .ai-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.ai-screen img{height:auto;aspect-ratio:auto;object-fit:contain}
+ .editorial-case blockquote{font-size:24px;padding:14px 0 14px 18px}
+ .about{padding:0 24px 50px;min-height:0}.about .about-persona{height:76svh;min-height:460px}.about .about-3d-statement{width:100%;font-size:clamp(23px,6.1vw,32px)}
+ .about .avatar-button{width:250px;height:280px;top:calc(50% - 140px)}.about>div:last-child{padding:40px 0 100px;margin-top:0}
+ .about>div:last-child p{font-size:17px;line-height:1.95}.about .capabilities{gap:14px 20px;font-size:12px;margin-top:36px}
+ footer{padding:44px 24px 24px}footer>div:first-child>a{font-size:clamp(28px,8vw,42px);overflow-wrap:anywhere;margin:22px 0 40px}.footer-bottom{flex-wrap:wrap;gap:16px;line-height:1.7}
+}
