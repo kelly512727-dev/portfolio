@@ -80,7 +80,7 @@ const projects=[
     ],
     "desc": "從設計提案到量產細節，理解工業設計如何落實於真實產品。在 ASUS Design Center 的實習參與中，透過筆記型電腦造型、圖像探索與跨部門協作，連結創意表達與製造需求。",
     "role": "研究、提案協作、3D 建模、產品渲染、量產準備",
-    "format": "企業實習 · 團隊協作",
+    "format": "企業實習 · 個人設計提案",
     "duration": "Zenbook / Vivobook / ExpertBook",
     "highlight": "提案探索 · Space Edition 卡片視覺 · Vivobook 量產協作",
     "sections": [
