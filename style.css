@@ -372,3 +372,8 @@ html[data-language] .story-subtitle{display:none}
 
 #gallery>.project[data-project="04"]>img{object-fit:contain;background:#f2f3f5}
 .asus-cover{margin:32px 0 56px}.asus-cover img{height:auto;max-height:none;object-fit:contain}
+
+/* Product cutouts supplied for the opening and cursor previews. */
+.hero .seed,.hero .trail{object-fit:contain;background:transparent;box-shadow:none;filter:drop-shadow(0 12px 16px #14204a12)}
+
+@media(min-width:768px){.hero .s1{height:min(36svh,300px)}.hero .s2{height:min(28svh,220px)}.hero .s3{top:57%;height:min(28svh,220px)}}
