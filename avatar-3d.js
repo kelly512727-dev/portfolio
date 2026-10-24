@@ -13,7 +13,7 @@ const [gltf,envTexture]=await Promise.all([
  new HDRLoader().loadAsync('assets/avatar-metal-studio.hdr')
 ]);
 const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromEquirectangular(envTexture).texture;pmrem.dispose();envTexture.dispose();
-const model=gltf.scene,head=new THREE.Group();scene.add(head);head.add(model);
+const model=gltf.scene,head=new THREE.Group(),recoil=new THREE.Group();scene.add(recoil);recoil.add(head);head.add(model);
 const bounds=new THREE.Box3().setFromObject(model),center=bounds.getCenter(new THREE.Vector3()),size3=bounds.getSize(new THREE.Vector3());
 model.position.sub(center);model.scale.setScalar(2.65/size3.y);model.position.multiplyScalar(2.65/size3.y);
 model.traverse(mesh=>{if(mesh.isMesh){mesh.material=new THREE.MeshStandardMaterial({color:new THREE.Color(.73,.70,.68),metalness:1,roughness:.16,envMapIntensity:1});}});
@@ -79,7 +79,11 @@ for(const eye of eyes)eye.scale.y=eye.userData.openEyeScaleY*openness;
 blueStrength=0;uniforms.blueSpot.value.set(localX,localY,blueStrength);
 for(let i=0;i<12;i++){const m=marks[i];uniforms.spots.value[i].set(m?m.x:-10,m?m.y:-10,m?Math.max(0,1-(performance.now()-m.born)/1500):0);}head.rotation.y+=(targetY-head.rotation.y)*.075;head.rotation.x+=(targetX-head.rotation.x)*.065;head.rotation.z+=((reduced.matches?0:-targetY*.13+Math.sin(t*.7)*.018)-head.rotation.z)*.045;
 head.position.set(0,0,0);
-const elapsed=t-clickAt,pulse=!reduced.matches&&elapsed<1.2?Math.sin(elapsed*13)*Math.exp(-elapsed*4):0;
+// A quick retreat into depth followed by a small, damped return.
+const elapsed=t-clickAt;
+const kick=!reduced.matches&&elapsed>=0&&elapsed<1.6?1.9*Math.exp(-elapsed*5.4)*Math.sin(elapsed*9.5):0;
+recoil.position.set(0,kick*.06,-kick*1.5);
+recoil.rotation.x=-kick*.46;
 const hairTime=t-clickAt;
 if(!reduced.matches&&hairTime>=0&&hairTime<1.65){
  const decay=Math.exp(-hairTime*3.3),attack=1-Math.exp(-hairTime*35);
