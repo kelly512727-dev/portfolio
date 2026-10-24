@@ -9,11 +9,18 @@ const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(32,1,.1,100);ca
 // Use the supplied polished-metal character and its studio reflections.
 renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;
 const [gltf,envTexture]=await Promise.all([
- new GLTFLoader().loadAsync('assets/avatar-metal.glb'),
+ new GLTFLoader().loadAsync('assets/avatar-metal.glb?v=20261024-revised'),
  new HDRLoader().loadAsync('assets/avatar-metal-studio.hdr')
 ]);
 const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromEquirectangular(envTexture).texture;pmrem.dispose();envTexture.dispose();
 const model=gltf.scene,head=new THREE.Group(),recoil=new THREE.Group();scene.add(recoil);recoil.add(head);head.add(model);
+// Normalize the updated export's nested transforms before local interactions.
+model.updateMatrixWorld(true);
+const portraitMeshes=[];model.traverse(mesh=>{if(mesh.isMesh)portraitMeshes.push(mesh)});
+for(const mesh of portraitMeshes){
+ mesh.geometry=mesh.geometry.clone().applyMatrix4(mesh.matrixWorld);
+ mesh.position.set(0,0,0);mesh.quaternion.identity();mesh.scale.set(1,1,1);model.add(mesh);
+}
 const bounds=new THREE.Box3().setFromObject(model),center=bounds.getCenter(new THREE.Vector3()),size3=bounds.getSize(new THREE.Vector3());
 model.position.sub(center);model.scale.setScalar(2.65/size3.y);model.position.multiplyScalar(2.65/size3.y);
 model.traverse(mesh=>{if(mesh.isMesh){mesh.material=new THREE.MeshStandardMaterial({color:new THREE.Color(.73,.70,.68),metalness:1,roughness:.16,envMapIntensity:1});}});
@@ -35,7 +42,10 @@ model.traverse(mesh=>{if(!mesh.isMesh||mesh.name!=='圓管')return;
  };
  mesh.material.customProgramCacheKey=()=> 'click-tuft-spring-v1';
 });
-const eyes=[];model.traverse(mesh=>{if(mesh.isMesh&&mesh.name.startsWith('四邊形球')&&Math.abs(mesh.scale.x)<.2){mesh.userData.openEyeScaleY=mesh.scale.y;eyes.push(mesh);}});
+const eyes=[];model.traverse(mesh=>{if(!mesh.isMesh||!mesh.name.startsWith('四邊形球'))return;
+ mesh.geometry.computeBoundingBox();const box=mesh.geometry.boundingBox,eyeSize=box.getSize(new THREE.Vector3());
+ if(Math.max(eyeSize.x,eyeSize.y,eyeSize.z)<.16){const pivot=box.getCenter(new THREE.Vector3());mesh.geometry.translate(-pivot.x,-pivot.y,-pivot.z);mesh.position.copy(pivot);mesh.userData.openEyeScaleY=1;eyes.push(mesh);}
+});
 let nextBlink=2.7,blinkStart=-10,blueTarget=0,blueStrength=0,clickAt=-10,studioRotation=0;
 // Tuning controls appear only in the requested lighting preview.
 if(new URLSearchParams(location.search).has('lighting')){
