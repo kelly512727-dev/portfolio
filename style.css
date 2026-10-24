@@ -377,3 +377,7 @@ html[data-language] .story-subtitle{display:none}
 .hero .seed,.hero .trail{object-fit:contain;background:transparent;box-shadow:none;filter:drop-shadow(0 12px 16px #14204a12)}
 
 @media(min-width:768px){.hero .s1{height:min(36svh,300px)}.hero .s2{height:min(28svh,220px)}.hero .s3{top:57%;height:min(28svh,220px)}}
+
+/* Give all transparent product previews the same display envelope. */
+.hero .trail{width:clamp(180px,17vw,250px);height:clamp(180px,17vw,250px);max-height:none}
+@media(min-width:768px){.hero .seed.s1,.hero .seed.s2,.hero .seed.s3{width:clamp(180px,17vw,250px);height:clamp(180px,17vw,250px)}}

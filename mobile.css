@@ -76,3 +76,5 @@
  .about>div:last-child p{font-size:17px;line-height:1.95}.about .capabilities{gap:14px 20px;font-size:12px;margin-top:36px}
  footer{padding:44px 24px 24px}footer>div:first-child>a{font-size:clamp(28px,8vw,42px);overflow-wrap:anywhere;margin:22px 0 40px}.footer-bottom{flex-wrap:wrap;gap:16px;line-height:1.7}
 }
+
+@media(max-width:767px){.hero .seed.s1,.hero .seed.s2{width:140px;height:140px}}
