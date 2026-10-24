@@ -78,3 +78,5 @@
 }
 
 @media(max-width:767px){.hero .seed.s1,.hero .seed.s2{width:140px;height:140px}}
+
+@media(max-width:767px){.about .about-3d-statement{width:calc(100% + 24px);font-size:clamp(30px,8.8vw,46px);line-height:1.35;letter-spacing:-.055em}}
