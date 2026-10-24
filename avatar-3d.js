@@ -1,26 +1,24 @@
-import * as THREE from './three.module.js';
+import * as THREE from './vendor/metal/three.module.js';
+import {GLTFLoader} from './vendor/metal/addons/loaders/GLTFLoader.js';
+import {HDRLoader} from './vendor/metal/addons/loaders/HDRLoader.js';
 const host=document.querySelector('.avatar-button');
 if(host){
 try{
-const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0xffffff,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.AgXToneMapping;renderer.toneMappingExposure=1.15;host.append(renderer.domElement);renderer.domElement.setAttribute('aria-label','Interactive chrome portrait with blinking eyes');host.classList.add('webgl-ready');
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0xffffff,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.AgXToneMapping;renderer.toneMappingExposure=1.15;host.append(renderer.domElement);renderer.domElement.setAttribute('aria-label','Interactive polished-metal portrait');host.classList.add('webgl-ready');
 const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(32,1,.1,100);camera.position.set(0,.15,8);
-// Real HDR studio illumination: broad highlights and detailed neutral reflections.
-const envPixels=new Float32Array(await fetch('assets/nomad-environment.f32').then(r=>r.arrayBuffer()));
-const envTexture=new THREE.DataTexture(envPixels,1024,512,THREE.RGBAFormat,THREE.FloatType);envTexture.mapping=THREE.EquirectangularReflectionMapping;envTexture.needsUpdate=true;
+// Use the supplied polished-metal character and its studio reflections.
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;
+const [gltf,envTexture]=await Promise.all([
+ new GLTFLoader().loadAsync('assets/avatar-metal.glb'),
+ new HDRLoader().loadAsync('assets/avatar-metal-studio.hdr')
+]);
 const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromEquirectangular(envTexture).texture;pmrem.dispose();envTexture.dispose();
-const chrome=new THREE.MeshPhysicalMaterial({color:0xeeeeee,metalness:1,roughness:.15,envMapIntensity:1.25,clearcoat:.6,clearcoatRoughness:.12});
-const head=new THREE.Group();scene.add(head);
-const modelData=await fetch('assets/avatar-nomad.json').then(r=>r.json());
-for(const data of modelData){const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(data.positions,3));geometry.setIndex(data.indices);geometry.setAttribute('normal',new THREE.Float32BufferAttribute(data.normals,3));const material=chrome.clone();if(data.material){material.color.fromArray(data.material.color);material.metalness=data.material.metalness;material.roughness=data.material.roughness;material.clearcoat=0;}material.envMapIntensity=2.26;const mesh=new THREE.Mesh(geometry,material);mesh.userData.eye=!!data.eye;mesh.name=data.name;mesh.material.vertexColors=false;head.add(mesh);}
-// Mirror the supplied right headphone across the model's center plane.
-const rightHeadphone=head.children.find(mesh=>mesh.name==='UV球體'&&!head.children.some(other=>other.name==='UV球體.001'));
-if(rightHeadphone){const mirrored=rightHeadphone.clone();mirrored.geometry=rightHeadphone.geometry.clone();const position=mirrored.geometry.attributes.position,normal=mirrored.geometry.attributes.normal;for(let i=0;i<position.count;i++){position.setX(i,-position.getX(i));normal.setX(i,-normal.getX(i));}const index=mirrored.geometry.index;for(let i=0;i<index.count;i+=3){const a=index.getX(i);index.setX(i,index.getX(i+2));index.setX(i+2,a);}mirrored.geometry.computeBoundingBox();mirrored.name='Headphone mirrored';head.add(mirrored);}
-const bounds=new THREE.Box3().setFromObject(head),center=bounds.getCenter(new THREE.Vector3()),size3=bounds.getSize(new THREE.Vector3());
-for(const mesh of head.children){mesh.geometry.translate(-center.x,-center.y,-center.z);mesh.geometry.scale(2.65/size3.y,2.65/size3.y,2.65/size3.y);const positions=mesh.geometry.attributes.position,colors=[];for(let i=0;i<positions.count;i++){const x=positions.getX(i),y=positions.getY(i);const color=new THREE.Color('#f3d4ac').lerp(new THREE.Color('#d794bb'),THREE.MathUtils.clamp(.5-y*.35+x*.12,0,1));colors.push(color.r,color.g,color.b);}mesh.geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));mesh.material.vertexColors=false;mesh.material.needsUpdate=true;}
-// Keep eye pivots local so blinks never deform the face or hair.
-const eyes=head.children.filter(mesh=>mesh.userData.eye);
-for(const eye of eyes){eye.geometry.computeBoundingBox();const pivot=eye.geometry.boundingBox.getCenter(new THREE.Vector3());eye.geometry.translate(-pivot.x,-pivot.y,-pivot.z);eye.position.copy(pivot);}
-let nextBlink=2.7,blinkStart=-10,blueTarget=0,blueStrength=0,clickAt=-10,studioRotation=238.666687*Math.PI/180;
+const model=gltf.scene,head=new THREE.Group();scene.add(head);head.add(model);
+const bounds=new THREE.Box3().setFromObject(model),center=bounds.getCenter(new THREE.Vector3()),size3=bounds.getSize(new THREE.Vector3());
+model.position.sub(center);model.scale.setScalar(2.65/size3.y);model.position.multiplyScalar(2.65/size3.y);
+model.traverse(mesh=>{if(mesh.isMesh){mesh.material=new THREE.MeshStandardMaterial({color:new THREE.Color(.73,.70,.68),metalness:1,roughness:.16,envMapIntensity:1});}});
+const eyes=[];model.traverse(mesh=>{if(mesh.isMesh&&mesh.name.startsWith('四邊形球')&&Math.abs(mesh.scale.x)<.2){mesh.userData.openEyeScaleY=mesh.scale.y;eyes.push(mesh);}});
+let nextBlink=2.7,blinkStart=-10,blueTarget=0,blueStrength=0,clickAt=-10,studioRotation=0;
 // Tuning controls appear only in the requested lighting preview.
 if(new URLSearchParams(location.search).has('lighting')){
  const controls=document.createElement('aside');controls.className='avatar-light-controls';controls.setAttribute('aria-label','人偶光影預覽');
@@ -29,8 +27,8 @@ if(new URLSearchParams(location.search).has('lighting')){
   const row=document.createElement('label'),text=document.createElement('span'),output=document.createElement('output'),input=document.createElement('input');text.textContent=label;input.type='range';input.min=min;input.max=max;input.step=step;input.value=value;input.setAttribute('aria-label',label);output.textContent=value+suffix;
   input.addEventListener('input',()=>{output.textContent=Number(input.value).toFixed(step<1?1:0)+suffix;update(Number(input.value))});row.append(text,output,input);controls.append(row);
  }
- slider('環境光亮度',.3,6,.1,2.3,value=>head.children.forEach(mesh=>mesh.material.envMapIntensity=value),'×');
- slider('光源方向',0,360,1,239,value=>studioRotation=value*Math.PI/180,'°');
+ slider('環境光亮度',.3,6,.1,1,value=>model.traverse(mesh=>{if(mesh.isMesh)mesh.material.envMapIntensity=value}),'×');
+ slider('光源方向',0,360,1,0,value=>studioRotation=value*Math.PI/180,'°');
  document.body.append(controls);
 }
 
@@ -59,7 +57,7 @@ const clock=new THREE.Clock();function frame(){requestAnimationFrame(frame);if(!
 if(!reduced.matches&&t>nextBlink){blinkStart=t;nextBlink=t+2.8+Math.random()*2.4;}
 const blinkTime=t-blinkStart;let openness=1;
 if(blinkTime<.11)openness=1-.93*Math.sin(blinkTime/.11*Math.PI/2);else if(blinkTime<.18)openness=.07;else if(blinkTime<.34)openness=.07+.93*Math.sin((blinkTime-.18)/.16*Math.PI/2);
-for(const eye of eyes)eye.scale.y=openness;
+for(const eye of eyes)eye.scale.y=eye.userData.openEyeScaleY*openness;
 blueStrength=0;uniforms.blueSpot.value.set(localX,localY,blueStrength);
 for(let i=0;i<12;i++){const m=marks[i];uniforms.spots.value[i].set(m?m.x:-10,m?m.y:-10,m?Math.max(0,1-(performance.now()-m.born)/1500):0);}head.rotation.y+=(targetY-head.rotation.y)*.075;head.rotation.x+=(targetX-head.rotation.x)*.065;head.rotation.z+=((reduced.matches?0:-targetY*.13+Math.sin(t*.7)*.018)-head.rotation.z)*.045;
 head.position.set(0,0,0);
