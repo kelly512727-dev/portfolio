@@ -19,6 +19,12 @@ model.updateMatrixWorld(true);
 const portraitMeshes=[];model.traverse(mesh=>{if(mesh.isMesh)portraitMeshes.push(mesh)});
 for(const mesh of portraitMeshes){
  mesh.geometry=mesh.geometry.clone().applyMatrix4(mesh.matrixWorld);
+ // Mirrored export nodes need their triangle winding restored after baking.
+ if(mesh.matrixWorld.determinant()<0){
+  const index=mesh.geometry.index;
+  if(index){for(let i=0;i<index.count;i+=3){const a=index.getX(i);index.setX(i,index.getX(i+2));index.setX(i+2,a);}index.needsUpdate=true;}
+ }
+
  mesh.position.set(0,0,0);mesh.quaternion.identity();mesh.scale.set(1,1,1);model.add(mesh);
 }
 const bounds=new THREE.Box3().setFromObject(model),center=bounds.getCenter(new THREE.Vector3()),size3=bounds.getSize(new THREE.Vector3());
