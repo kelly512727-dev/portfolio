@@ -9,7 +9,7 @@ const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(32,1,.1,100);ca
 // Use the supplied polished-metal character and its studio reflections.
 renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;
 const [gltf,envTexture]=await Promise.all([
- new GLTFLoader().loadAsync('assets/avatar-metal.glb?v=20261024-revised'),
+ new GLTFLoader().loadAsync('assets/avatar-metal.glb?v=f2ec51c2d2'),
  new HDRLoader().loadAsync('assets/avatar-metal-studio.hdr')
 ]);
 const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromEquirectangular(envTexture).texture;pmrem.dispose();envTexture.dispose();
