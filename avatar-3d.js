@@ -17,6 +17,24 @@ const model=gltf.scene,head=new THREE.Group();scene.add(head);head.add(model);
 const bounds=new THREE.Box3().setFromObject(model),center=bounds.getCenter(new THREE.Vector3()),size3=bounds.getSize(new THREE.Vector3());
 model.position.sub(center);model.scale.setScalar(2.65/size3.y);model.position.multiplyScalar(2.65/size3.y);
 model.traverse(mesh=>{if(mesh.isMesh){mesh.material=new THREE.MeshStandardMaterial({color:new THREE.Color(.73,.70,.68),metalness:1,roughness:.16,envMapIntensity:1});}});
+// Bend only the two tips above the crown; the roots stay attached to the hair.
+const tuftMotion={value:new THREE.Vector2()};
+model.traverse(mesh=>{if(!mesh.isMesh||mesh.name!=='圓管')return;
+ mesh.material.onBeforeCompile=shader=>{
+  shader.uniforms.tuftMotion=tuftMotion;
+  shader.vertexShader=shader.vertexShader.replace('#include <common>',`#include <common>
+   uniform vec2 tuftMotion;
+   float tuftAngle(vec3 p){return mix(tuftMotion.x,tuftMotion.y,smoothstep(-.015,.025,p.x))*smoothstep(.487,.565,p.y);}
+   mat3 tuftTurn(float a){float c=cos(a),s=sin(a);return mat3(c,s,0.,-s,c,0.,0.,0.,1.);}
+  `).replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
+   objectNormal=tuftTurn(tuftAngle(position))*objectNormal;
+  `).replace('#include <begin_vertex>',`#include <begin_vertex>
+   vec3 tuftRoot=vec3(position.x<0.?-.005:.025,.487,.04);
+   transformed=tuftRoot+tuftTurn(tuftAngle(position))*(transformed-tuftRoot);
+  `);
+ };
+ mesh.material.customProgramCacheKey=()=> 'click-tuft-spring-v1';
+});
 const eyes=[];model.traverse(mesh=>{if(mesh.isMesh&&mesh.name.startsWith('四邊形球')&&Math.abs(mesh.scale.x)<.2){mesh.userData.openEyeScaleY=mesh.scale.y;eyes.push(mesh);}});
 let nextBlink=2.7,blinkStart=-10,blueTarget=0,blueStrength=0,clickAt=-10,studioRotation=0;
 // Tuning controls appear only in the requested lighting preview.
@@ -62,7 +80,12 @@ blueStrength=0;uniforms.blueSpot.value.set(localX,localY,blueStrength);
 for(let i=0;i<12;i++){const m=marks[i];uniforms.spots.value[i].set(m?m.x:-10,m?m.y:-10,m?Math.max(0,1-(performance.now()-m.born)/1500):0);}head.rotation.y+=(targetY-head.rotation.y)*.075;head.rotation.x+=(targetX-head.rotation.x)*.065;head.rotation.z+=((reduced.matches?0:-targetY*.13+Math.sin(t*.7)*.018)-head.rotation.z)*.045;
 head.position.set(0,0,0);
 const elapsed=t-clickAt,pulse=!reduced.matches&&elapsed<1.2?Math.sin(elapsed*13)*Math.exp(-elapsed*4):0;
-head.rotation.x+=pulse*.018;head.scale.set(1+pulse*.025,1-pulse*.02,1);
+const hairTime=t-clickAt;
+if(!reduced.matches&&hairTime>=0&&hairTime<1.65){
+ const decay=Math.exp(-hairTime*3.3),attack=1-Math.exp(-hairTime*35);
+ tuftMotion.value.set(Math.sin(hairTime*19)*.65*decay*attack,-Math.sin(hairTime*21)*.8*decay*attack);
+}else tuftMotion.value.set(0,0);
+head.scale.set(1,1,1);
 scene.environmentRotation.y=studioRotation;scene.environmentRotation.x=0;
 if(!reduced.matches){for(const letter of letters){const r=letter.getBoundingClientRect();const dx=r.left+r.width/2-mouseX,dy=r.top+r.height/2-mouseY;const distance=Math.hypot(dx,dy);const force=pointerActive?Math.max(0,1-distance/205):0;const angle=Math.atan2(dy,dx);letter.style.transform=`translate(${Math.cos(angle)*force*62}px,${Math.sin(angle)*force*68}px) rotate(${Math.cos(angle)*force*60}deg) scale(${1+force*.12})`;letter.style.color=force>.12?'#2455FF':'';}}
 renderer.setRenderTarget(target);renderer.render(scene,camera);renderer.setRenderTarget(null);renderer.render(postScene,postCamera)}frame();
