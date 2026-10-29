@@ -3,8 +3,8 @@ const caseHeading=(index,label,title,text)=>`<div class="editorial-heading"><spa
 const caseCards=(folder,items,extraClass='')=>`<div class="editorial-cards cols-${items.length} ${extraClass}">${items.map((x,i)=>`<article>${caseImage(`${folder}/${x.image}`,x.title)}<span class="card-index">0${i+1}</span><h4>${x.title}</h4><p>${x.text}</p></article>`).join('')}</div>`;
 const caseSteps=items=>`<ol class="editorial-steps ${items.some(x=>x.image)?'has-images':''}" style="--step-count:${items.length}">${items.map((x,i)=>`<li>${x.image?`<img src="assets/${x.image}.jpg" alt="${x.title}：${x.text}" loading="lazy">`: ''}<span>0${i+1}</span><h4>${x.title}</h4><p>${x.text}</p></li>`).join('')}</ol>`;
 const projectTeams={
- 'NING':{en:'Chen Ching yi, Hong Qingpeng, Dai Yongqiong',zh:'陳靜怡、洪洧鵬、戴允君'},
- 'OASIS TRAILBLAZER':{en:'Chen Ching yi, Hong Qingpeng, Dai Yongqiong',zh:'陳靜怡、洪洧鵬、戴允君'},
+ 'NING':{en:'Chen Ching yi, Hong Weipeng, Dai Yongqiong',zh:'陳靜怡、洪洧鵬、戴允君'},
+ 'OASIS TRAILBLAZER':{en:'Chen Ching yi, Hong Weipeng, Dai Yongqiong',zh:'陳靜怡、洪洧鵬、戴允君'},
  'TAKO CHIMNEY':{en:'Chen Ching yi, Shao Weizhi, Zhang Yuxuan, Zhang Yayan',zh:'陳靜怡、翁暐智、張玉涵、張雅萱'}
 };
 const caseTeam=p=>{const team=projectTeams[p.name],credit=team||{en:'Chen Ching yi',zh:'陳靜怡'};return `<dt>${team?'TEAM MEMBERS / 團隊成員':'DESIGNER / 設計師'}</dt><dd><span class="copy-en" lang="en">${credit.en}</span><span class="copy-zh" lang="zh-Hant">${credit.zh}</span></dd>`};
